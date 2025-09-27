@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wordle by Pavlo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Mobile Menu Button -->
+    {% if user %}
+    <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+    
+    <!-- Left Sidebar for User Stats -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="{{ user.picture }}" alt="{{ user.name }}" class="sidebar-avatar">
+            <h3 class="sidebar-username">{{ user.name }}</h3>
+        </div>
+        
+        <div class="sidebar-stats">
+            <div class="stat-item">
+                <div class="stat-number" id="games-count">{{ user.games_played }}</div>
+                <div class="stat-label">Games</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="win-rate">{{ user.win_percentage }}%</div>
+                <div class="stat-label">Win Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="current-streak">{{ user.current_streak }}</div>
+                <div class="stat-label">Streak</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="max-streak">{{ user.max_streak }}</div>
+                <div class="stat-label">Best</div>
+            </div>
+        </div>
+        
+        <div class="sidebar-actions">
+            <a href="{{ url_for('profile') }}" class="sidebar-btn">👤 Profile</a>
+            <a href="{{ url_for('leaderboard') }}" class="sidebar-btn">🏆 Leaderboard</a>
+            <a href="{{ url_for('logout') }}" class="sidebar-btn">🚪 Logout</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="main-content">
+        <div class="container">
+        
+        <!-- Game Board -->
+        <div id="game-board">
+            <!-- Rows will be dynamically created here -->
+        </div>
+        
+        <!-- Current guess display -->
+        <div class="current-guess-container">
+            <div class="current-guess" id="current-guess">
+                <div class="letter-box" id="letter1">_</div>
+                <div class="letter-box" id="letter2">_</div>
+                <div class="letter-box" id="letter3">_</div>
+                <div class="letter-box" id="letter4">_</div>
+                <div class="letter-box" id="letter5">_</div>
+            </div>
+        </div>
+        
+        <!-- Input section -->
+        <div class="input-section">
+            <input type="text" id="guess-input" maxlength="5" placeholder="Enter 5-letter word" autocomplete="off">
+            <button id="submit-guess">Submit Guess</button>
+        </div>
+        
+        <!-- On-screen Keyboard -->
+        <div class="keyboard">
+            <div class="keyboard-row">
+                <button class="key" data-key="Q">Q</button>
+                <button class="key" data-key="W">W</button>
+                <button class="key" data-key="E">E</button>
+                <button class="key" data-key="R">R</button>
+                <button class="key" data-key="T">T</button>
+                <button class="key" data-key="Y">Y</button>
+                <button class="key" data-key="U">U</button>
+                <button class="key" data-key="I">I</button>
+                <button class="key" data-key="O">O</button>
+                <button class="key" data-key="P">P</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key" data-key="A">A</button>
+                <button class="key" data-key="S">S</button>
+                <button class="key" data-key="D">D</button>
+                <button class="key" data-key="F">F</button>
+                <button class="key" data-key="G">G</button>
+                <button class="key" data-key="H">H</button>
+                <button class="key" data-key="J">J</button>
+                <button class="key" data-key="K">K</button>
+                <button class="key" data-key="L">L</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key key-enter" id="key-enter">ENTER</button>
+                <button class="key" data-key="Z">Z</button>
+                <button class="key" data-key="X">X</button>
+                <button class="key" data-key="C">C</button>
+                <button class="key" data-key="V">V</button>
+                <button class="key" data-key="B">B</button>
+                <button class="key" data-key="N">N</button>
+                <button class="key" data-key="M">M</button>
+                <button class="key key-backspace" id="key-backspace">⌫</button>
+            </div>
+        </div>
+        
+        <!-- Game controls -->
+        <div class="controls">
+            <button id="new-game">New Game</button>
+            <button id="show-word">Show Word</button>
+        </div>
+        
+        <!-- Game status -->
+        <div id="game-status"></div>
+        
+        <!-- Game info -->
+        <div class="game-info">
+            <div>Tries: <span id="tries-count">0</span>/6</div>
+        </div>
+
+
+    <!-- Footer -->
+    <footer class="game-footer">
+        <p>Wordle by Pavlo</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

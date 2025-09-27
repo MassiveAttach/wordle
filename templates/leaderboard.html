@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Leaderboard - Wordle by Pavlo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .leaderboard-container {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .leaderboard-title {
+            color: #ffffff;
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        
+        .leaderboard-table {
+            background: #1a1a1b;
+            border-radius: 10px;
+            border: 1px solid #3a3a3c;
+            overflow: hidden;
+        }
+        
+        .leaderboard-header {
+            background: #2a2a2b;
+            padding: 15px 20px;
+            display: grid;
+            grid-template-columns: 60px 1fr 100px 100px 100px;
+            gap: 15px;
+            font-weight: bold;
+            color: #c9b458;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+        
+        .leaderboard-row {
+            padding: 15px 20px;
+            display: grid;
+            grid-template-columns: 60px 1fr 100px 100px 100px;
+            gap: 15px;
+            align-items: center;
+            border-bottom: 1px solid #3a3a3c;
+            transition: background-color 0.2s;
+        }
+        
+        .leaderboard-row:hover {
+            background: #2a2a2b;
+        }
+        
+        .leaderboard-row:last-child {
+            border-bottom: none;
+        }
+        
+        .rank {
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+        .rank-other { color: #c9b458; }
+        
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .player-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #6aaa64;
+        }
+        
+        .player-name {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        
+        .stat-value {
+            color: #ffffff;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .win-rate {
+            color: #6aaa64;
+        }
+        
+        .games-count {
+            color: #c9b458;
+        }
+        
+        .streak {
+            color: #ff6b6b;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #c9b458;
+            font-size: 1.1em;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 30px auto 0;
+            padding: 12px 24px;
+            background: #6aaa64;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        .back-link:hover {
+            background: #5a9a54;
+            text-decoration: none;
+            color: white;
+        }
+        
+        @media (max-width: 600px) {
+            .leaderboard-header,
+            .leaderboard-row {
+                grid-template-columns: 50px 1fr 80px 80px;
+                gap: 10px;
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+            
+            .leaderboard-header .games-count,
+            .leaderboard-row .games-count {
+                display: none;
+            }
+            
+            .player-avatar {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .player-name {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="leaderboard-container">
+        <h1 class="leaderboard-title">🏆 Leaderboard</h1>
+        
+        {% if top_players %}
+        <div class="leaderboard-table">
+            <div class="leaderboard-header">
+                <div>Rank</div>
+                <div>Player</div>
+                <div class="games-count">Games</div>
+                <div>Win Rate</div>
+                <div>Best Streak</div>
+            </div>
+            
+            {% for player in top_players %}
+            <div class="leaderboard-row">
+                <div class="rank rank-{{ loop.index if loop.index <= 3 else 'other' }}">
+                    {% if loop.index == 1 %}🥇
+                    {% elif loop.index == 2 %}🥈
+                    {% elif loop.index == 3 %}🥉
+                    {% else %}{{ loop.index }}
+                    {% endif %}
+                </div>
+                <div class="player-info">
+                    <img src="{{ player.picture }}" alt="{{ player.name }}" class="player-avatar">
+                    <span class="player-name">{{ player.name }}</span>
+                </div>
+                <div class="stat-value games-count">{{ player.games_played }}</div>
+                <div class="stat-value win-rate">{{ player.win_percentage }}%</div>
+                <div class="stat-value streak">{{ player.max_streak }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="leaderboard-table">
+            <div class="empty-state">
+                No players yet. Be the first to play and claim the top spot! 🎯
+            </div>
+        </div>
+        {% endif %}
+        
+        <div style="text-align: center;">
+            <a href="{{ url_for('index') }}" class="back-link">Back to Game</a>
+        </div>
+    </div>
+</body>
+</html>

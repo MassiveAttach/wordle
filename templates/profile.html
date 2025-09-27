@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Profile - Wordle by Pavlo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #1a1a1b;
+            border-radius: 10px;
+            border: 1px solid #3a3a3c;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #6aaa64;
+            margin-bottom: 15px;
+        }
+        
+        .profile-name {
+            color: #ffffff;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .profile-email {
+            color: #c9b458;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: #2a2a2b;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #3a3a3c;
+        }
+        
+        .stat-value {
+            color: #6aaa64;
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #c9b458;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .recent-games {
+            margin-top: 40px;
+        }
+        
+        .section-title {
+            color: #ffffff;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .games-list {
+            background: #1a1a1b;
+            border-radius: 8px;
+            border: 1px solid #3a3a3c;
+            overflow: hidden;
+        }
+        
+        .game-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #3a3a3c;
+        }
+        
+        .game-item:last-child {
+            border-bottom: none;
+        }
+        
+        .game-word {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .game-result {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .game-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .status-won {
+            background: #6aaa64;
+            color: white;
+        }
+        
+        .status-lost {
+            background: #d73027;
+            color: white;
+        }
+        
+        .game-tries {
+            color: #c9b458;
+            font-size: 0.9em;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 12px 24px;
+            background: #6aaa64;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        .back-link:hover {
+            background: #5a9a54;
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <img src="{{ user.picture }}" alt="{{ user.name }}" class="profile-avatar">
+            <div class="profile-name">{{ user.name }}</div>
+            <div class="profile-email">{{ user.email }}</div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value">{{ user.games_played }}</span>
+                    <div class="stat-label">Games Played</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">{{ user.games_won }}</span>
+                    <div class="stat-label">Games Won</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">{{ user.win_percentage }}%</span>
+                    <div class="stat-label">Win Rate</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">{{ user.current_streak }}</span>
+                    <div class="stat-label">Current Streak</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">{{ user.max_streak }}</span>
+                    <div class="stat-label">Best Streak</div>
+                </div>
+            </div>
+        </div>
+        
+        {% if recent_games %}
+        <div class="recent-games">
+            <h2 class="section-title">Recent Games</h2>
+            <div class="games-list">
+                {% for game in recent_games %}
+                <div class="game-item">
+                    <div class="game-word">{{ game.target_word }}</div>
+                    <div class="game-result">
+                        <span class="game-status {{ 'status-won' if game.won else 'status-lost' }}">
+                            {{ 'WON' if game.won else 'LOST' }}
+                        </span>
+                        <span class="game-tries">{{ game.tries_used }}/6 tries</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{{ url_for('index') }}" class="back-link">Back to Game</a>
+        </div>
+    </div>
+</body>
+</html>
