@@ -287,4 +287,14 @@ if __name__ == '__main__':
     else:
         print(f"🚀 Starting Wordle server in production mode on port {port}")
     
-    app.run(debug=debug, host='0.0.0.0', port=port, threaded=True)
+    # Use production-ready server in production mode
+    if not debug:
+        try:
+            from waitress import serve
+            print("🌐 Using Waitress production server")
+            serve(app, host='0.0.0.0', port=port, threads=10)
+        except ImportError:
+            print("⚠️  Waitress not installed, falling back to Flask dev server")
+            app.run(debug=False, host='0.0.0.0', port=port, threaded=True)
+    else:
+        app.run(debug=debug, host='0.0.0.0', port=port, threaded=True)
