@@ -253,9 +253,14 @@ def show_word():
 @login_required
 def leaderboard():
     """Show leaderboard with top players"""
-    top_players = User.query.filter(User.games_played > 0)\
-                           .order_by(User.win_percentage.desc(), User.max_streak.desc())\
-                           .limit(20).all()
+    # Get all users with games played and sort them by win percentage and max streak
+    users_with_games = User.query.filter(User.games_played > 0).all()
+    
+    # Sort by win percentage (descending), then by max streak (descending), then by games won (descending)
+    top_players = sorted(users_with_games, 
+                        key=lambda u: (u.win_percentage, u.max_streak, u.games_won), 
+                        reverse=True)[:20]
+    
     return render_template('leaderboard.html', top_players=top_players)
 
 if __name__ == '__main__':
