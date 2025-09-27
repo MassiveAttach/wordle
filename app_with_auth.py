@@ -273,8 +273,8 @@ if __name__ == '__main__':
         print("📝 Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env file")
         print("🔗 Get credentials at: https://console.cloud.google.com/")
     
-    # Get port from environment variable (for Fly.io) or default to 8000
-    port = int(os.environ.get('PORT', 8000))
+    # Get port from environment variable (for Fly.io) or default to 8080
+    port = int(os.environ.get('PORT', 8080))
     debug = os.environ.get('FLASK_ENV') != 'production'
     
     if debug:
