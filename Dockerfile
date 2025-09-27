@@ -22,7 +22,7 @@ COPY . .
 RUN mkdir -p instance
 
 # Set environment variables
-ENV FLASK_APP=app_with_auth.py
+ENV FLASK_APP=app_production.py
 ENV FLASK_ENV=production
 ENV PYTHONPATH=/app
 
@@ -30,4 +30,4 @@ ENV PYTHONPATH=/app
 EXPOSE 8080
 
 # Run the application
-CMD ["python", "app_with_auth.py"]
+CMD ["python", "app_production.py"]

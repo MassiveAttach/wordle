@@ -94,21 +94,24 @@ def show_word():
     return jsonify({'word': session.get('target_word', 'No game active')})
 
 if __name__ == '__main__':
+    # Get port from environment variable (Fly.io sets PORT=8080)
+    port = int(os.environ.get('PORT', 8080))
+    
     # Production-ready server with Waitress
     try:
         from waitress import serve
         print("🚀 Starting Wordle server with Waitress (Production mode)")
-        print("📍 Local access: http://127.0.0.1:8000")
-        print("🌐 Network access: http://0.0.0.0:8000")
+        print(f"📍 Server running on port {port}")
+        print("🌐 Network access: http://0.0.0.0:" + str(port))
         print("👥 Supports multiple concurrent users")
         print("🛑 Press Ctrl+C to stop")
-        serve(app, host='0.0.0.0', port=8000, threads=10)
+        serve(app, host='0.0.0.0', port=port, threads=10)
     except ImportError:
         print("⚠️  Waitress not installed, falling back to Flask dev server")
         print("💡 Install Waitress for better performance: pip install waitress")
         print("🚀 Starting Wordle server with Flask (Development mode)")
-        print("📍 Local access: http://127.0.0.1:8000")
-        print("🌐 Network access: http://0.0.0.0:8000")
+        print(f"📍 Server running on port {port}")
+        print("🌐 Network access: http://0.0.0.0:" + str(port))
         print("👥 Threading enabled for concurrent users")
         print("🛑 Press Ctrl+C to stop")
-        app.run(debug=False, host='0.0.0.0', port=8000, threaded=True)
+        app.run(debug=False, host='0.0.0.0', port=port, threaded=True)
